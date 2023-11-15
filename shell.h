@@ -111,11 +111,11 @@ typedef struct builtin
 } builtin_table;
 
 
-/* hsh.c */
-int hsh(info_t *, char **);
-int find_builtin(info_t *);
-void find_cmd(info_t *);
-void fork_cmd(info_t *);
+/* hshell.c */
+int hshell(info_t *, char **);
+int findthebuiltin(info_t *);
+void findthecmd(info_t *);
+void forkthecmd(info_t *);
 
 /* path.c */
 int is_cmd(info_t *, char *);
