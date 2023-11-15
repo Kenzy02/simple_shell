@@ -14,25 +14,25 @@ int hshell(info_t *info, char **av)
 
 	while (r != -1 && builtin_ret != -2)
 	{
-		clear_info(info);
-		if (interactive(info))
+		clear(info);
+		if (InterActive(info))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
 		r = get_input(info);
 		if (r != -1)
 		{
-			set_info(info, av);
+			set(info, av);
 			builtin_ret = findthebuiltin(info);
 			if (builtin_ret == -1)
 				findthecmd(info);
 		}
-		else if (interactive(info))
+		else if (InterActive(info))
 			_putchar('\n');
-		free_info(info, 0);
+		free(info, 0);
 	}
-	write_history(info);
-	free_info(info, 1);
-	if (!interactive(info) && info->status)
+	write(info);
+	free(info, 1);
+	if (!InterActive(info) && info->status)
 		exit(info->status);
 	if (builtin_ret == -2)
 	{
@@ -56,14 +56,14 @@ int findthebuiltin(info_t *info)
 {
 	int i, built_in_ret = -1;
 	builtin_table builtintbl[] = {
-		{"exit", _myexit},
-		{"env", _myenv},
-		{"help", _myhelp},
-		{"history", _myhistory},
-		{"setenv", _mysetenv},
-		{"unsetenv", _myunsetenv},
-		{"cd", _mycd},
-		{"alias", _myalias},
+		{"exit", _exit},
+		{"env", _env},
+		{"help", _help},
+		{"history", _history},
+		{"setenv", _setenv1},
+		{"unsetenv", _unsetenv1},
+		{"cd", _cd},
+		{"alias", _alias},
 		{NULL, NULL}
 	};
 
@@ -100,7 +100,7 @@ void findthecmd(info_t *info)
 	if (!k)
 		return;
 
-	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
+	path = findthepath(info, _getenv(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
@@ -108,7 +108,7 @@ void findthecmd(info_t *info)
 	}
 	else
 	{
-		if ((interactive(info) || _getenv(info, "PATH=")
+		if ((InterActive(info) || _getenv(info, "PATH=")
 			|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
 			forkthecmd(info);
 		else if (*(info->arg) != '\n')
@@ -140,7 +140,7 @@ void forkthecmd(info_t *info)
 	{
 		if (execve(info->path, info->argv, get_environ(info)) == -1)
 		{
-			free_info(info, 1);
+			free(info, 1);
 			if (errno == EACCES)
 				exit(126);
 			exit(1);

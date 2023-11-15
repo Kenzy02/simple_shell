@@ -120,7 +120,7 @@ void forkthecmd(info_t *);
 /* path.c */
 int is_cmd(info_t *, char *);
 char *dup_chars(char *, int, int);
-char *find_path(info_t *, char *, char *);
+char *findthepath(info_t *, char *, char *);
 
 /* loophsh.c */
 int loophsh(char **);
@@ -131,103 +131,103 @@ int _eputchar(char);
 int _putfd(char c, int fd);
 int _putsfd(char *str, int fd);
 
-/* string_functions.c */
+/* string_func.c */
 int _strlen(char *);
 int _strcmp(char *, char *);
-char *starts_with(const char *, const char *);
+char *startswith(const char *, const char *);
 char *_strcat(char *, char *);
 
-/* string_functions2.c */
+/* string_func2.c */
 char *_strcpy(char *, char *);
 char *_strdup(const char *);
 void _puts(char *);
 int _putchar(char);
 
-/* string_functions3.c */
+/* string_func3.c */
 char *_strncpy(char *, char *, int);
 char *_strncat(char *, char *, int);
 char *_strchr(char *, char);
 
-/* string_functions4.c */
+/* string_func4.c */
 char **strtow(char *, char *);
 char **strtow2(char *, char);
 
-/* memory_functions */
-char *_memset(char *, char, unsigned int);
-void ffree(char **);
+/* memory_func */
+char *_memoryset(char *, char, unsigned int);
+void Ffree(char **);
 void *_realloc(void *, unsigned int, unsigned int);
 
-/* memory_functions2.c */
-int bfree(void **);
+/* memory_func2.c */
+int Bfree(void **);
 
-/* more_functions.c */
-int interactive(info_t *);
+/* more_funcs.c */
+int InterActive(info_t *);
 int is_delim(char, char *);
-int _isalpha(int);
-int _atoi(char *);
+int isalpha(int);
+int atoi(char *);
 
-/* more_functions2.c */
-int _erratoi(char *);
+/* more_funcs2.c */
+int error_atoi(char *);
 void print_error(info_t *, char *);
 int print_d(int, int);
 char *convert_number(long int, int, int);
 void remove_comments(char *);
 
-/* builtin_emulators.c */
-int _myexit(info_t *);
-int _mycd(info_t *);
-int _myhelp(info_t *);
+/* builtin_EMU.c */
+int _exit(info_t *);
+int _cd(info_t *);
+int _help(info_t *);
 
-/* builtin_emulators2.c */
-int _myhistory(info_t *);
-int _myalias(info_t *);
+/* builtin_EMU2.c */
+int _history(info_t *);
+int _alias(info_t *);
 
-/* getline.c module */
+/* getline.c */
 ssize_t get_input(info_t *);
 int _getline(info_t *, char **, size_t *);
 void sigintHandler(int);
 
-/* info.c module */
-void clear_info(info_t *);
-void set_info(info_t *, char **);
-void free_info(info_t *, int);
+/* info.c */
+void clear(info_t *);
+void set(info_t *, char **);
+void free(info_t *, int);
 
-/* env.c module */
+/* env1.c */
 char *_getenv(info_t *, const char *);
-int _myenv(info_t *);
-int _mysetenv(info_t *);
-int _myunsetenv(info_t *);
-int populate_env_list(info_t *);
+int _env(info_t *);
+int _setenv1(info_t *);
+int _unsetenv1(info_t *);
+int _envlist(info_t *);
 
-/* env2.c module */
+/* env2.c */
 char **get_environ(info_t *);
-int _unsetenv(info_t *, char *);
-int _setenv(info_t *, char *, char *);
+int _unsetenv2(info_t *, char *);
+int _setenv2(info_t *, char *, char *);
 
-/* file_io_functions.c */
+/* file.c */
 char *get_history_file(info_t *info);
-int write_history(info_t *info);
-int read_history(info_t *info);
-int build_history_list(info_t *info, char *buf, int linecount);
-int renumber_history(info_t *info);
+int write(info_t *info);
+int read(info_t *info);
+int build(info_t *info, char *buf, int linecount);
+int renumber(info_t *info);
 
-/* liststr.c module */
+/* string.c */
 list_t *add_node(list_t **, const char *, int);
 list_t *add_node_end(list_t **, const char *, int);
-size_t print_list_str(const list_t *);
-int delete_node_at_index(list_t **, unsigned int);
-void free_list(list_t **);
+size_t print_str(const list_t *);
+int delete_index_node(list_t **, unsigned int);
+void free_str(list_t **);
 
-/* liststr2.c module */
-size_t list_len(const list_t *);
+/* string2.c */
+size_t list_length(const list_t *);
 char **list_to_strings(list_t *);
 size_t print_list(const list_t *);
 list_t *node_starts_with(list_t *, char *, char);
 ssize_t get_node_index(list_t *, list_t *);
 
-/* chain.c */
+/* str.c */
 int is_chain(info_t *, char *, size_t *);
-void check_chain(info_t *, char *, size_t *, size_t, size_t);
+void chain_check(info_t *, char *, size_t *, size_t, size_t);
 int replace_alias(info_t *);
 int replace_vars(info_t *);
 int replace_string(char **, char *);
