@@ -1,12 +1,12 @@
 #include "shell.h"
 
 /**
- * InterActive - returns true if shell is interactive mode
+ * interactive - returns true if shell is interactive mode
  * @info: struct address
  *
- * Return: 1 if InterActive mode, 0 otherwise
+ * Return: 1 if interactive mode, 0 otherwise
  */
-int InterActive(info_t *info)
+int interactive(info_t *info)
 {
 	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
@@ -26,12 +26,12 @@ int is_delim(char c, char *delim)
 }
 
 /**
- *isalpha - checks for alphabetic character
+ *_isalpha - checks for alphabetic character
  *@c: The character to input
  *Return: 1 if c is alphabetic, 0 otherwise
  */
 
-int isalpha(int c)
+int _isalpha(int c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		return (1);
@@ -40,12 +40,12 @@ int isalpha(int c)
 }
 
 /**
- *atoi - converts a string to an integer
+ *_atoi - converts a string to an integer
  *@s: the string to be converted
  *Return: 0 if no numbers in string, converted number otherwise
  */
 
-int atoi(char *s)
+int _atoi(char *s)
 {
 	int i, sign = 1, flag = 0, output;
 	unsigned int result = 0;

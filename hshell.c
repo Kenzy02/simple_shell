@@ -1,38 +1,38 @@
 #include "shell.h"
 
 /**
- * hshell - main shell loop
+ * hsh - main shell loop
  * @info: the parameter & return info struct
  * @av: the argument vector from main()
  *
  * Return: 0 on success, 1 on error, or error code
  */
-int hshell(info_t *info, char **av)
+int hsh(info_t *info, char **av)
 {
 	ssize_t r = 0;
 	int builtin_ret = 0;
 
 	while (r != -1 && builtin_ret != -2)
 	{
-		clear(info);
-		if (InterActive(info))
+		clear_info(info);
+		if (interactive(info))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
 		r = get_input(info);
 		if (r != -1)
 		{
-			set(info, av);
-			builtin_ret = findthebuiltin(info);
+			set_info(info, av);
+			builtin_ret = find_builtin(info);
 			if (builtin_ret == -1)
-				findthecmd(info);
+				find_cmd(info);
 		}
-		else if (InterActive(info))
+		else if (interactive(info))
 			_putchar('\n');
-		free(info, 0);
+		free_info(info, 0);
 	}
-	write(info);
-	free(info, 1);
-	if (!InterActive(info) && info->status)
+	write_history(info);
+	free_info(info, 1);
+	if (!interactive(info) && info->status)
 		exit(info->status);
 	if (builtin_ret == -2)
 	{
@@ -44,7 +44,7 @@ int hshell(info_t *info, char **av)
 }
 
 /**
- * findthebuiltin - finds a builtin command
+ * find_builtin - finds a builtin command
  * @info: the parameter & return info struct
  *
  * Return: -1 if builtin not found,
@@ -52,18 +52,18 @@ int hshell(info_t *info, char **av)
  *			1 if builtin found but not successful,
  *			-2 if builtin signals exit()
  */
-int findthebuiltin(info_t *info)
+int find_builtin(info_t *info)
 {
 	int i, built_in_ret = -1;
 	builtin_table builtintbl[] = {
-		{"exit", _exit},
-		{"env", _env},
-		{"help", _help},
-		{"history", _history},
-		{"setenv", _setenv1},
-		{"unsetenv", _unsetenv1},
-		{"cd", _cd},
-		{"alias", _alias},
+		{"exit", _myexit},
+		{"env", _myenv},
+		{"help", _myhelp},
+		{"history", _myhistory},
+		{"setenv", _mysetenv},
+		{"unsetenv", _myunsetenv},
+		{"cd", _mycd},
+		{"alias", _myalias},
 		{NULL, NULL}
 	};
 
@@ -78,12 +78,12 @@ int findthebuiltin(info_t *info)
 }
 
 /**
- * findthecmd - finds a command in PATH
+ * find_cmd - finds a command in PATH
  * @info: the parameter & return info struct
  *
  * Return: void
  */
-void findthecmd(info_t *info)
+void find_cmd(info_t *info)
 {
 	char *path = NULL;
 	int i, k;
@@ -100,17 +100,17 @@ void findthecmd(info_t *info)
 	if (!k)
 		return;
 
-	path = findthepath(info, _getenv(info, "PATH="), info->argv[0]);
+	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
 	if (path)
 	{
 		info->path = path;
-		forkthecmd(info);
+		fork_cmd(info);
 	}
 	else
 	{
-		if ((InterActive(info) || _getenv(info, "PATH=")
+		if ((interactive(info) || _getenv(info, "PATH=")
 			|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
-			forkthecmd(info);
+			fork_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
 			info->status = 127;
@@ -120,12 +120,12 @@ void findthecmd(info_t *info)
 }
 
 /**
- * forkthecmd - forks a an exec thread to run cmd
+ * fork_cmd - forks a an exec thread to run cmd
  * @info: the parameter & return info struct
  *
  * Return: void
  */
-void forkthecmd(info_t *info)
+void fork_cmd(info_t *info)
 {
 	pid_t child_pid;
 
@@ -140,7 +140,7 @@ void forkthecmd(info_t *info)
 	{
 		if (execve(info->path, info->argv, get_environ(info)) == -1)
 		{
-			free(info, 1);
+			free_info(info, 1);
 			if (errno == EACCES)
 				exit(126);
 			exit(1);
